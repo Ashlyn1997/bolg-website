@@ -1,8 +1,17 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
-import "./globals.css";
+import { Inter as FontSans } from "next/font/google";
+import { cn } from "@/lib/utils";
+import Link from 'next/link'
+import "../../styles/globals.css"
+import "../../styles/prism.css"
+import { Providers } from "@/components/providers";
+import { ThemeToggle } from "@/components/theme-toggle"
 
-const inter = Inter({ subsets: ["latin"] });
+
+const fontSans = FontSans({
+  subsets: ["latin"],
+  variable: "--font-sans",
+});
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -15,8 +24,87 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body className={inter.className}>{children}</body>
+    <html lang="en" suppressHydrationWarning>
+      <body
+        className={cn(
+          "min-h-screen bg-background font-sans antialiased",
+          fontSans.variable
+        )}
+      >
+        <Providers>
+          <div className="flex min-h-screen flex-col">
+            {/* Navigation Bar */}
+            <nav className="sticky top-0 z-50 border-b border-gray-200 bg-white/80 backdrop-blur-sm dark:border-gray-800 dark:bg-gray-950/80">
+              <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-3">
+                {/* Logo/Brand */}
+                <div className="text-xl font-bold">Ashlyn's little talk</div>
+
+                {/* Navigation Links */}
+                <div className="hidden items-center space-x-6 md:flex">
+                  <Link
+                    href="/"
+                    className="hover:text-gray-600 dark:hover:text-gray-300"
+                  >
+                    Home
+                  </Link>
+                  <Link
+                    href="/category"
+                    className="hover:text-gray-600 dark:hover:text-gray-300"
+                  >
+                    Category
+                  </Link>
+                  <Link
+                    href="/overview"
+                    className="hover:text-gray-600 dark:hover:text-gray-300"
+                  >
+                    Overview
+                  </Link>
+                  <Link
+                    href="/about"
+                    className="hover:text-gray-600 dark:hover:text-gray-300"
+                  >
+                    About
+                  </Link>
+                  <ThemeToggle />
+                </div>
+
+                {/* Mobile Menu Button */}
+                <button className="md:hidden">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="h-6 w-6"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M4 6h16M4 12h16M4 18h16"
+                    />
+                  </svg>
+                </button>
+              </div>
+            </nav>
+
+            {/* Main Content */}
+            <main className="flex-1">
+              <div className="mx-auto max-w-7xl px-4 py-8">              
+                {/* Content Area */}
+                {children}
+              </div>
+            </main>
+
+            {/* Footer */}
+            <footer className="border-t border-gray-200 bg-white py-6 dark:border-gray-800 dark:bg-gray-950">
+              <div className="mx-auto max-w-7xl px-4 text-center text-sm text-gray-600 dark:text-gray-400">
+                © 2024 Your Blog. All rights reserved.
+              </div>
+            </footer>
+          </div>
+        </Providers>
+      </body>
     </html>
   );
 }
